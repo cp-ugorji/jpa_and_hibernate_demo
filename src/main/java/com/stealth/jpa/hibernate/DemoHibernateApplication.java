@@ -1,10 +1,15 @@
 package com.stealth.jpa.hibernate;
 
 import com.stealth.jpa.hibernate.controller.CourseRepository;
+import com.stealth.jpa.hibernate.controller.EmployeeRepository;
 import com.stealth.jpa.hibernate.controller.StudentRepository;
 import com.stealth.jpa.hibernate.entity.Course;
+import com.stealth.jpa.hibernate.entity.FullTimeEmployee;
+import com.stealth.jpa.hibernate.entity.PartTimeEmployee;
 import com.stealth.jpa.hibernate.entity.Review;
+import com.stealth.jpa.hibernate.entity.ReviewRating;
 import com.stealth.jpa.hibernate.entity.Student;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
@@ -24,6 +29,9 @@ public class DemoHibernateApplication implements CommandLineRunner{
     
     @Autowired
     private StudentRepository studentRepository;
+    
+    @Autowired
+    private EmployeeRepository employeeRepository;
     
     public static void main(String[] args) {
             SpringApplication.run(DemoHibernateApplication.class, args);
@@ -47,11 +55,20 @@ public class DemoHibernateApplication implements CommandLineRunner{
 //        List<Review> reviews = new ArrayList<>();
 //        reviews.add(new Review("3", "Pretty Good"));
 //        reviews.add(new Review("3", "Great"));
+//        reviews.add(new Review(ReviewRating.FIVE, "Pretty Good"));
+//        reviews.add(new Review(ReviewRating.THREE, "Great"));
 //        courseRepository.addReviewsForCourse(10001L, reviews);
 
-        Student student = new Student("Okechuwkwu");
-        Course course = new Course("C++");
-        studentRepository.saveStudentAndCourse(student, course);
+//        Student student = new Student("Okechuwkwu");
+//        Course course = new Course("C++");
+//        studentRepository.saveStudentAndCourse(student, course);
+
+        FullTimeEmployee fullTimeEmployee = new FullTimeEmployee(new BigDecimal(20000000.78), "Chukwudi");
+        PartTimeEmployee partTimeEmployee = new PartTimeEmployee(new BigDecimal(200), "Philip");
+        employeeRepository.insert(fullTimeEmployee);
+        employeeRepository.insert(partTimeEmployee);
+        
+        logger.info("Employees -> {}", employeeRepository.getAllEmployee());
     }
 
 }

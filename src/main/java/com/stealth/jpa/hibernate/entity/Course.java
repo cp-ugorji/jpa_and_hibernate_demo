@@ -12,13 +12,23 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 /**
  *
  * @author Chux
  */
 @Entity
+@NamedQueries(value = {
+    @NamedQuery(name = "get_all_courses", query = "select c from Course c"),
+    @NamedQuery(name = "get_all_courses_join_fetch", query = "select c from Course c join fetch c.students s")
+})
+@SQLDelete(sql = "update course set is_deleted = true where id = ?")
+@Where(clause = "is_deleted = false")
 public class Course {
     @Id
     @GeneratedValue
@@ -35,7 +45,9 @@ public class Course {
     //so to avoid creating 2 tables(course_student and student_courses), 
     //we map by courses which creates only one relationship/join table student_courses
     private List<Student> students = new ArrayList<>();
-
+    
+    private boolean isDeleted;
+    
     protected Course() {
     }
     
